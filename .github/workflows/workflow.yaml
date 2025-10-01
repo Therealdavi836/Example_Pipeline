@@ -1,15 +1,21 @@
 name: hello world
-on: [workflow_dispatch]
+on: [push]
 jobs:
   hello_world:
     runs-on: ubuntu-latest
     steps:
 
-      - run: ls -la
-      
       - name: Clonar el repositorio
         uses: actions/checkout@v3
 
+      - name: crear clave ssh
+        env:
+          ssh_key: $ {{ secrets.ssh_key}}
+
+      - run: |
+          echo "$ssh_key" > key.pem
+          chmod 600 key.pem
+
       - run: ls -la
 
-      - run: python3 main.py
+      - run: cat key.pem
