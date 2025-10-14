@@ -3,7 +3,6 @@ on:
   push:
     branches: [ web ]
 
-
 permissions:
   contents: read
   packages: write
@@ -13,7 +12,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-     
       - name: checkout del codigo
         uses: actions/checkout@v5
 
