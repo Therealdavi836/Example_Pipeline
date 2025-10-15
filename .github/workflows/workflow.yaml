@@ -21,10 +21,14 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      
+
+      - name: convertir nombre de propietario a minúsculas
+        id: vars
+        run: echo "owner_lower=$(echo '${{ github.repository_owner }}' | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+
       - name: Construir y publicar la imagen docker
         uses: docker/build-push-action@v4
         with: 
           context: .
           push: true
-          tags: ghcr.io/${{ github.repository_owner,, }}/web_app:latest
+          tags: ghcr.io/${{ env.owner_lower }}/web_app:latest
