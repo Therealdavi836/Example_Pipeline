@@ -1,0 +1,42 @@
+name: build image
+
+on:
+  push:
+    branches: [example]
+
+jobs:
+
+  builds:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: checkout
+        uses: actions/checkout@v5
+
+      - name: python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: dependencias
+        run: pip install flask
+
+      - name : pruebas
+        run: python test.py 
+
+      - name: login a github packages
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN}}
+
+      - name: Construir y publicar imagen
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: true
+          tags: ghcr.io/${{ github.repository_owner}}/python_app:latest
+
+        
